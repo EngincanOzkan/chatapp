@@ -1,7 +1,6 @@
 # chatapp
 
-This project full of chat application created by react native. 
-project web services stored in www.engincanozkan.com
+This project an chat application created with React-Native. Project web services stored in www.engincanozkan.com.
 
 Setup:
 create react native project
