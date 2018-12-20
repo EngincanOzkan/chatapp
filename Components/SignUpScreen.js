@@ -25,7 +25,7 @@ export default class SignUpScreen extends Component {
   }  
 
   SignUpToSystem(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/users/signup', 
+    fetch('http://www.engincanozkan.com/api/users/signup', 
     { method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -92,6 +92,6 @@ export default class SignUpScreen extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'white',
+      backgroundColor: '#F5FCFF',
     }
   });

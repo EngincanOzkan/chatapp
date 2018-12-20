@@ -34,7 +34,7 @@ export default class PublicTalks extends Component {
 
     fetchPublicTalkContentsData (){
         this.setState({refreshing: true});
-        fetch('http://localhost:8888/chatappWebServices/public/api/getContents', 
+        fetch('http://www.engincanozkan.com/api/getContents', 
         { method: 'GET',
           headers: {
             Accept: 'application/json',

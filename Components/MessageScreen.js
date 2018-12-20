@@ -1,10 +1,27 @@
 import React, {Component} from 'react';
 import {StyleSheet, KeyboardAvoidingView,Image,FlatList,TouchableOpacity} from 'react-native';
-import { Container, Content, Form, Item, Input, Label, Button, Icon, Text, View} from 'native-base';
+import { Container, Content, Form, Item, Input, Icon, Text, View} from 'native-base';
+import ImagePicker from "react-native-image-picker";
 import MessageTextCome from './MessageTextCome';
 import MessageTextWent from './MessageTextWent';
 
 export default class MessageScreen extends Component {
+
+  handleChoosePhoto(){
+    const options = {
+      noData: true,
+    }
+    // Open Image Library:
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if (response.uri) {
+        this.setState({ photo: response })
+        if(this.state.photo != null){
+          this.imageUpload();
+        }
+      }
+    });
+  }
+
   constructor(props){
     super(props);
     this.state={
@@ -13,6 +30,7 @@ export default class MessageScreen extends Component {
       fromuserid: 0,
       touserid: 0,
       usermessage: "",
+      photo: null,
     }
     this.getUser =  this.getUser.bind(this);
     this.getMessages =  this.getMessages.bind(this);
@@ -24,6 +42,7 @@ export default class MessageScreen extends Component {
   componentDidMount(){
     this.getUser();
     this.getMessages();
+    this.component._root.scrollToEnd()
   }
 
   static navigationOptions = ({navigation}) => {
@@ -33,7 +52,7 @@ export default class MessageScreen extends Component {
   };
 
   getMessages(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/getPrivateMessage',
+    fetch('http://www.engincanozkan.com/api/getPrivateMessage',
       {
         method: 'POST',
         headers: {
@@ -56,7 +75,7 @@ export default class MessageScreen extends Component {
   }
 
   sendMessage(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/addPrivateMessage',
+    fetch('http://www.engincanozkan.com/api/addPrivateMessage',
       {
         method: 'POST',
         headers: {
@@ -76,8 +95,42 @@ export default class MessageScreen extends Component {
       });
   }
 
+  /// IMAGE UPLOAD 
+  imageUpload(){
+
+    const form = new FormData();
+    console.log(this.state.photo.type);
+    form.append("uploads", {
+      uri: this.state.photo.uri,
+      type: 'image/jpeg', // or photo.type
+      name: 'testPhotoName'
+    });
+    form.append("fromuserid", this.props.navigation.state.params.userid[0]);
+    form.append("touserid", this.props.navigation.state.params.lookingUserid);
+    form.append("usermessage", "");
+    form.append("isfile", "1");
+
+   fetch(
+      'http://www.engincanozkan.com/api/imageUpload',
+      {
+        body: form,
+        method: "POST",
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      }
+    ).then((response) => response.json())
+    .catch((error) => {
+      alert("ERROR " + error)
+    })
+    .then((responseData) => {
+      alert("Succes "+ responseData)
+    }).done();
+  }
+ /// IMAGE UPLOAD 
+
   getUser(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/users/'+this.props.navigation.state.params.lookingUserid,{
+    fetch('http://www.engincanozkan.com/api/users/'+this.props.navigation.state.params.lookingUserid,{
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -99,24 +152,28 @@ export default class MessageScreen extends Component {
   render() { 
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container} keyboardVerticalOffset="-20" enabled>
-          <Container>
-            <Content>
+          <Container style={styles.container}>
+            <Content ref={c => (this.component = c)}>
               <FlatList
                 data={this.state.dataSource}
                 renderItem={({item}) =>  (
-                                            item.fromuserid == this.props.navigation.state.params.userid[0] ?   <MessageTextWent message={item.usermessage}/>
-                                            : <MessageTextCome message={item.usermessage}/>
+                                            item.fromuserid == this.props.navigation.state.params.userid[0] ?   
+                                              (item.isfile == "0" ? <MessageTextWent message={item.usermessage} /> : <MessageTextWent image={"http://www.engincanozkan.com/images/"+item.usermessage}/>) :
+                                              (item.isfile == "0" ? <MessageTextCome message={item.usermessage} /> : <MessageTextCome image={"http://www.engincanozkan.com/images/"+item.usermessage}/>)
                                           )}
                 keyExtractor={(item, index) => index}
               />
             </Content>
             <Form style={styles.containerOfKeyboard}>
+              <TouchableOpacity onPress={this.handleChoosePhoto.bind(this)} style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
+                <Icon  style={{fontSize: 30,color: "#fff"}} name="ios-images" />
+              </TouchableOpacity>
               <Item style={{backgroundColor: 'white', flex:5}} rounded>
                 <Input onChangeText={(text) => this.setState({usermessage: text})} style={styles.sendTextInput} placeholder="write smt!"/>
               </Item>
-              <Button onPress={this.sendMessage.bind(this)} style={{marginLeft: 5, flex: 1,alignItems: 'center',justifyContent: 'center',}} primary rounded>
-                <Icon  style={{fontSize: 30}} name="ios-send-outline" />
-              </Button>
+              <TouchableOpacity onPress={this.sendMessage.bind(this)} style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
+                <Icon  style={{fontSize: 40,color: "#fff"}} name="ios-send" />
+              </TouchableOpacity>
             </Form>
            </Container>
            
@@ -128,7 +185,7 @@ export default class MessageScreen extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'white',
+      backgroundColor: '#F5FCFF',
     },
     containerOfKeyboard: {
       backgroundColor: '#393e46',

@@ -36,7 +36,7 @@ export default class PublicTalkPage extends Component {
   }
  
   addPublicMessage(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/addPublicMessage',{
+    fetch('http://www.engincanozkan.com/api/addPublicMessage',{
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -59,7 +59,7 @@ export default class PublicTalkPage extends Component {
   }
 
   getUser(userid){
-    fetch('http://localhost:8888/chatappWebServices/public/api/users/'+userid,{
+    fetch('http://www.engincanozkan.com/api/users/'+userid,{
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -78,7 +78,7 @@ export default class PublicTalkPage extends Component {
   }
 
   getPublicTalkContentsData (){
-    fetch('http://localhost:8888/chatappWebServices/public/api/getContent/'+this.props.navigation.state.params.publictalkcontentid, 
+    fetch('http://www.engincanozkan.com/api/getContent/'+this.props.navigation.state.params.publictalkcontentid, 
     { method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -99,7 +99,7 @@ export default class PublicTalkPage extends Component {
   }
 
   getPublicTalks(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/getPublicMessages',{
+    fetch('http://www.engincanozkan.com/api/getPublicMessages',{
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -122,7 +122,7 @@ export default class PublicTalkPage extends Component {
   render() {
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
     return (
-      <Container>
+      <Container Style={styles.container}>
       <Content>
         <Card style={{ backgroundColor: "#B3BCC2" }}>
           <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10, marginTop: 5}}>
@@ -178,14 +178,15 @@ export default class PublicTalkPage extends Component {
         <Item style={{backgroundColor: 'white', flex:5}} rounded>
           <Input onChangeText={(text) => this.setState({usermessage: text})}  value={this.state.usermessage} style={styles.sendTextInput} placeholder="write smt!"/>
         </Item>
-        <Button onPress={this.addPublicMessage.bind()} style={{marginLeft: 5, flex: 1,alignItems: 'center',justifyContent: 'center',}} primary rounded>
-          <Icon  style={{fontSize: 30}} name="ios-send-outline" />
-        </Button>
+        <TouchableOpacity onPress={this.addPublicMessage.bind(this)} style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
+                <Icon  style={{fontSize: 40,color: "#fff"}} name="ios-send" />
+        </TouchableOpacity>
       </Form>
     </Container>
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

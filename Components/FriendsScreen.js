@@ -7,8 +7,8 @@
  */
 
 import React, {Component} from 'react';
-import {View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import {Container, Content, Input, Button , Form ,Label, Item, Icon, Header, Text,CardItem,Card,Body} from 'native-base';
+import { StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {Container, Content, Input, Item, Icon, Text, Body} from 'native-base';
 
 import PersonTag from './PersonTag';
 
@@ -28,7 +28,7 @@ export default class UsersScreen extends Component {
   }
 
   searchUser (text){
-    fetch('http://localhost:8888/chatappWebServices/public/api/getFriends', 
+    fetch('http://www.engincanozkan.com/api/getFriends', 
     { method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -58,7 +58,7 @@ export default class UsersScreen extends Component {
     <Container sytle={styles.container}>
       <Item searchBar rounded style={styles.searchBox}>
         <Icon name="ios-search" />
-          <Input onChangeText={(text) => this.searchUser(text) } placeholder="Search username..." />
+          <Input onChangeText={(text) => this.searchUser(text) } placeholder="Search username in your friends..." />
         <Icon name="ios-people" />
       </Item>
       <Text style={styles.header}> Friends </Text>

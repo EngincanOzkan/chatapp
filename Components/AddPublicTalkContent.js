@@ -43,13 +43,14 @@ export default class AddPublicTalkContent extends Component {
             buttonText: "Okay",
             position: "bottom"
           });*/
+          this.props.navigation.navigate('home',{userid: this.props.navigation.state.params.userid});
     }).catch((error) => {
       console.log(error)
     });
   }
 
   /* addPublicTalkContentData (){
-    fetch('http://localhost:8888/chatappWebServices/public/api/addPublicTalkContent', 
+    fetch('http://www.engincanozkan.com/api/addPublicTalkContent', 
     { method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -106,6 +107,6 @@ export default class AddPublicTalkContent extends Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'white',
+      backgroundColor: '#F5FCFF',
     }
   });

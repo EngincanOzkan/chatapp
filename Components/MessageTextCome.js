@@ -7,29 +7,37 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet,TouchableOpacity,View} from 'react-native';
-import {Card, CardItem, Thumbnail, Body, Left, Right, Text, Icon,Container} from 'native-base';
+import {StyleSheet, Image, View} from 'react-native';
+import {CardItem, Text} from 'native-base';
 
 const Dimensions = require('Dimensions');
 
 export default class MessageText extends Component {
   render() {
-    const images = {
-        "1": require('../assets/me.png'),
-        "2": require('../assets/asd.png')
+    console.log(this.props.image);
+    if( this.props.image != null ){
+      return (
+          <View style={styles.container}> 
+              <CardItem style={styles.messageBox}> 
+                          <Image source={{uri: this.props.image}} style={{height: 200, width: 200, flex: 1}}/>          
+              </CardItem>     
+          </View>
+      );
     }
- 
-    return (
+    else{
+      return (
         <View style={styles.container}> 
-            <CardItem style={styles.messageBox}>
-                        <Text>
-                          {this.props.message}
-                        </Text>
-            </CardItem>  
+            <CardItem style={styles.messageBox}> 
+              <Text>
+                {this.props.message}
+              </Text>         
+            </CardItem>     
         </View>
     );
+    }
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',

@@ -24,10 +24,26 @@ import AddPublicTalkContent from './Components/AddPublicTalkContent';
 import UserLookScreen from './Components/UserLookScreen'
 import UserRequestLookScreen from './Components/UserRequestLookScreen';
 import PublicTalkPage from './Components/PublicTalkPage';
+import ConnectionLost from './Components/ConnectionLost';
+import Settings from './Components/AppTabNavigation/Settings';
 
 const AppStackNavigator = StackNavigator({
   login: {
-    screen: LoginScreen
+    screen: LoginScreen,
+    navigationOptions: ({navigation}) => ({
+      swipeEnabled: false,
+      gesturesEnabled: false
+      }
+    )
+  },
+  connectionLost: {
+    screen: ConnectionLost,
+    navigationOptions: ({navigation}) => ({
+      gesturesEnabled: false,
+      title: "ChatApp",
+      headerLeft: (<Icon name="bug" style={{fontSize: 45, paddingLeft: 10 }} />)
+        }
+      )
   },
   signup: {
     screen: SignUpScreen,
@@ -76,8 +92,18 @@ const AppStackNavigator = StackNavigator({
               <Icon name="ios-paper-plane" style={{ color: tintColor }} />
             )
           }),
+      },
+      settings:{
+        screen: Settings,
+        navigationOptions: ({ navigation }) => ({
+          title: 'Settings',
+          tabBarIcon: ({ tintColor }) => (
+            <Icon name="ios-cog" style={{ color: tintColor }} />
+          )
+        }),
       }
     }, {
+      gesturesEnabled: false,
       animationEnabled: true,
       swipeEnabled: true,
       tabBarPosition: "bottom",
@@ -96,6 +122,7 @@ const AppStackNavigator = StackNavigator({
       }
   }),
     navigationOptions: ({ navigation }) => ( {
+      gesturesEnabled: false,
       headerLeft: (<TouchableOpacity onPress={
         () => navigation.navigate('Users',{userid: navigation.state.params.userid})
       }>
@@ -139,8 +166,13 @@ const AppStackNavigator = StackNavigator({
            () => navigation.toggleDrawer()
         }>
                         <Icon style={{ paddingRight: 10 }} name="ios-menu" />
-                      </TouchableOpacity>)
+                      </TouchableOpacity>),
+        headerLeft:  
+        (<TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Icon name="ios-arrow-round-back-outline" style={{fontSize: 45, paddingLeft: 10 }} />
+                    </TouchableOpacity>)
         }),
+       
   },
   LookScreen: {
     screen: UserLookScreen

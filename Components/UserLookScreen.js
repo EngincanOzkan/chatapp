@@ -17,10 +17,11 @@ export default class UserLookScreen extends Component
         }
         this.checkFriendRequest = this.checkFriendRequest.bind(this);
         this.sendFriendRequest = this.sendFriendRequest.bind(this);
+    
     }
 
     checkFriendRequest(){
-        fetch('http://localhost:8888/chatappWebServices/public/api/checkFriendStatus',{
+        fetch('http://www.engincanozkan.com/api/checkFriendStatus',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -66,7 +67,7 @@ export default class UserLookScreen extends Component
     sendFriendRequest(){
         if(!this.state.requestSent)
         {
-            fetch('http://localhost:8888/chatappWebServices/public/api/addFriend',{
+            fetch('http://www.engincanozkan.com/api/addFriend',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -86,7 +87,7 @@ export default class UserLookScreen extends Component
                 console.log(error)
             });
         }else{
-            fetch('http://localhost:8888/chatappWebServices/public/api/deleteFriend',{
+            fetch('http://www.engincanozkan.com/api/deleteFriend',{
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -112,7 +113,7 @@ export default class UserLookScreen extends Component
     }
 
     getUser(){
-        fetch('http://localhost:8888/chatappWebServices/public/api/users/'+this.props.navigation.state.params.lookingUserid,{
+        fetch('http://www.engincanozkan.com/api/users/'+this.props.navigation.state.params.lookingUserid,{
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -137,19 +138,27 @@ export default class UserLookScreen extends Component
 
     render(){
         //alert(this.props.navigation.state.params.lookingUserid);
-        const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+        //const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
         return(
+            this.state.confirmed == '1'  ? 
             <Container style={styles.container}>
-                    <Thumbnail large source={{uri: uri}} />
                     <Text> {this.state.dataSource} </Text>
-                    <Text> +3 km far from you </Text>
-                    
-                    <Button style={styles.buttonMessage} primary block> 
+
+                    <Button  onPress={() => this.props.navigation.navigate('messages', {userid: this.props.navigation.state.params.userid, lookingUserid: this.props.navigation.state.params.lookingUserid})} style={styles.buttonMessage} primary block> 
                         <Text>Send Message</Text>
-                    </Button>
+                    </Button>  
+
                     <Button onPress={this.sendFriendRequest.bind(this)} style={{marginTop: 5, marginLeft: 10, marginRight: 10, backgroundColor: this.state.requestButtonColor}} block> 
                         <Text>{this.state.requestButtonText}</Text> 
                     </Button>
+            </Container> 
+            : 
+             <Container style={styles.container}>
+                <Text> {this.state.dataSource} </Text>
+
+                <Button onPress={this.sendFriendRequest.bind(this)} style={{marginTop: 5, marginLeft: 10, marginRight: 10, backgroundColor: this.state.requestButtonColor}} block> 
+                    <Text>{this.state.requestButtonText}</Text> 
+                </Button>
             </Container>
         )
         

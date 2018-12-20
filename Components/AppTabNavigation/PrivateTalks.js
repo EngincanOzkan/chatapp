@@ -31,7 +31,7 @@ export default class PrivateTalks extends Component {
   }
 
   getChats(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/getChats',
+    fetch('http://www.engincanozkan.com/api/getChats',
       {
         method: 'POST',
         headers: {
@@ -59,9 +59,17 @@ export default class PrivateTalks extends Component {
             <FlatList
             data={this.state.dataSource}
             renderItem={({item}) =>  
-                        <TouchableOpacity  onPress={ () => this.props.navigation.navigate('messages', {userid: this.props.navigation.state.params.userid, lookingUserid: item.userid})}>
-                            <MessageTag name={item.username} text={item.usermessage} profilephoto="2"/>
-                        </TouchableOpacity>
+                        (
+                          item.isfile == "0" ?
+                          <TouchableOpacity 
+                              onPress={ () => this.props.navigation.navigate('messages', {userid: this.props.navigation.state.params.userid, lookingUserid: item.userid})}>
+                              <MessageTag name={item.username} text={item.usermessage} profilephoto="2"/> 
+                                </TouchableOpacity> :
+                           <TouchableOpacity  
+                              onPress={ () => this.props.navigation.navigate('messages', {userid: this.props.navigation.state.params.userid, lookingUserid: item.userid})}>
+                              <MessageTag name={item.username} text="FILE" profilephoto="2"/> 
+                            </TouchableOpacity>
+                        )
                         }
             keyExtractor={(item, index) => index}
           />

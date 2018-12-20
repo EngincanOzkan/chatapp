@@ -32,7 +32,7 @@ export default class UsersScreen extends Component {
 
 
   getMyRequests(){
-    fetch('http://localhost:8888/chatappWebServices/public/api/getMyRequests', 
+    fetch('http://www.engincanozkan.com/api/getMyRequests', 
     { method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -55,7 +55,7 @@ export default class UsersScreen extends Component {
   }
 
   searchUser (text){
-    fetch('http://localhost:8888/chatappWebServices/public/api/users/listUsers', 
+    fetch('http://www.engincanozkan.com/api/users/listUsers', 
     { method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -72,9 +72,7 @@ export default class UsersScreen extends Component {
           isLoading: false,
           dataSource: responseJson,
         })       
-
         console.log(responseJson);
-
     }).catch((error) => {
       console.log(error)
     });

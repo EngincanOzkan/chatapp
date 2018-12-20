@@ -7,11 +7,39 @@
  */
 
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {NetInfo,AsyncStorage,StyleSheet} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Button, Text, Toast } from 'native-base';
 
-
 export default class LoginScreen extends Component {
+
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('userid', this.state.userid);
+    } catch (error) {
+      // Error saving data
+    }
+  }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('userid');
+      if (value !== null) {
+        // We have data!!
+        if(value != 0){
+        console.log(value);
+        this.props.navigation.navigate('home', {userid: value});
+        Toast.show({
+          text: "Welcome to team again :D",
+          duration: 3000,
+          buttonText: "Okay",
+          position: "bottom"
+        });
+      }
+      }
+     } catch (error) {
+       // Error retrieving data
+     }
+  }
 
   constructor(props){
     super(props);
@@ -21,19 +49,32 @@ export default class LoginScreen extends Component {
       isLoading: true,
       dataSource: null,
       showToast: false,
+      userid: "0",
     }
+    setInterval(() => (
+      NetInfo.isConnected.fetch().then(isConnected => {
+        if(isConnected)
+        {
+          console.log('Internet is connected');
+        }else
+        {
+          console.log('Internet connection lost');
+          this.props.navigation.navigate('connectionLost');
+        }
+      })
+    ), 1000);
   }
 
   loginData (){
-    fetch('http://localhost:8888/chatappWebServices/public/api/users/signin', 
+    fetch('http://www.engincanozkan.com/api/users/signin', 
     { method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: "DeltaMonkey",//this.state.usernameValue,
-        password: "1453",//this.state.passwordValue,
+        username: this.state.usernameValue,//"ANANAN",//
+        password: this.state.passwordValue,//"1453",//
       }),
     })
     .then( (response) => response.json() )
@@ -49,6 +90,10 @@ export default class LoginScreen extends Component {
         });
         console.log(status);
         if(status != "0"){
+          this.setState({
+            userid: status[0]
+          })
+          this._storeData();
           this.props.navigation.navigate('home', {userid: status});
           Toast.show({
             text: "Welcome to team again :D",
@@ -65,12 +110,22 @@ export default class LoginScreen extends Component {
           });
         }
     }).catch((error) => {
-      console.log(error)
+      console.log(error);
+      Toast.show({
+        text: "Check your informations!!",
+        duration: 3000,
+        buttonText: "Okay",
+        position: "bottom"
+      });
     });
   }
 
   loginFunction(){
     this.loginData();
+  }
+
+  componentDidMount(){
+    this._retrieveData();
   }
 
   render() {
@@ -102,20 +157,12 @@ export default class LoginScreen extends Component {
         </Content>
       </Container>
     );
-    /*        }else{
-                let status = this.state.dataSource.map((val, key) => {
-                  return <View key={key}>
-                      <Text> {val.status} </Text>
-                        </View>
-                });
-
-                return(
-                  <Container>
-                    <Content>
-                       {status}
-                    </Content>
-                  </Container>
-                );
-            }*/
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+  }
+});
