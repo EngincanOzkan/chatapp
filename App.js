@@ -36,6 +36,7 @@ const AppStackNavigator = StackNavigator({
       }
     )
   },
+
   connectionLost: {
     screen: ConnectionLost,
     navigationOptions: ({navigation}) => ({
